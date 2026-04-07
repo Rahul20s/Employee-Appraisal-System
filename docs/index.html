@@ -117,9 +117,9 @@
             event.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
-            const user = demoUsers.find(u => u.username === username && u.password === password);
+            const user = demoUsers.find(u => (u.username === username || u.employeeId === username) && u.password === password);
             if (!user) {
-                alert('Invalid credentials. Use hr / password123, supervisor1-4 / password123, or employee1-10 / password123.');
+                alert('Invalid credentials. Use hr / password123, supervisor1-4 / password123, or employee1-10 / password123. You may also login with employee IDs like EMP001.');
                 return false;
             }
             localStorage.setItem('appraisalDemoUser', JSON.stringify(user));
