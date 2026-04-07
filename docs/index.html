@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Appraisal Demo</title>
+    <title>Login - Employee Appraisal System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -57,8 +56,8 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1><i class="fas fa-clipboard-list me-2"></i>Employee Appraisal Demo</h1>
-            <p class="mb-0">Static GitHub Pages friendly demo using local browser storage</p>
+            <h1><i class="fas fa-clipboard-list me-2"></i>Employee Appraisal System</h1>
+            <p class="mb-0">Browser-only GitHub Pages demo of the full appraisal workflow</p>
         </div>
         <div class="login-form">
             <div class="row justify-content-center">
@@ -81,16 +80,13 @@
                     </form>
                     <div class="mt-4">
                         <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle me-2"></i>GitHub Pages Demo</h6>
-                            <small>This version runs entirely in your browser. No backend or server is required.</small>
+                            <h6><i class="fas fa-info-circle me-2"></i>Demo login credentials</h6>
+                            <p class="mb-0">This demo includes 1 HR, 4 supervisors, and 10 employees.</p>
                         </div>
                         <div class="alert alert-light">
-                            <strong>Demo credentials</strong>
-                            <ul class="mb-0 mt-2">
-                                <li><strong>Employee</strong>: <code>employee</code> / <code>password123</code></li>
-                                <li><strong>Supervisor</strong>: <code>supervisor</code> / <code>password123</code></li>
-                                <li><strong>HR</strong>: <code>hr</code> / <code>password123</code></li>
-                            </ul>
+                            <strong>HR</strong>: <code>hr</code> / <code>password123</code><br>
+                            <strong>Supervisors</strong>: <code>supervisor1</code> - <code>supervisor4</code> / <code>password123</code><br>
+                            <strong>Employees</strong>: <code>employee1</code> - <code>employee10</code> / <code>password123</code>
                         </div>
                     </div>
                 </div>
@@ -100,9 +96,21 @@
 
     <script>
         const demoUsers = [
-            { username: 'employee', password: 'password123', displayName: 'Employee User', employeeId: 'EMP001', department: 'IT', designation: 'Software Engineer', role: 'employee' },
-            { username: 'supervisor', password: 'password123', displayName: 'Supervisor User', employeeId: 'SUP001', department: 'IT', designation: 'Team Lead', role: 'supervisor' },
-            { username: 'hr', password: 'password123', displayName: 'HR Manager', employeeId: 'HR001', department: 'HR', designation: 'HR Manager', role: 'hr' }
+            { username: 'hr', password: 'password123', displayName: 'HR Manager', role: 'hr', employeeId: 'HR001', department: 'HR', designation: 'HR Manager', managedEmployees: ['EMP001','EMP002','EMP003','EMP004','EMP005','EMP006','EMP007','EMP008','EMP009','EMP010'] },
+            { username: 'supervisor1', password: 'password123', displayName: 'Supervisor One', role: 'supervisor', employeeId: 'SUP001', department: 'IT', designation: 'Senior Team Lead', managedEmployees: ['EMP001','EMP002','EMP003'] },
+            { username: 'supervisor2', password: 'password123', displayName: 'Supervisor Two', role: 'supervisor', employeeId: 'SUP002', department: 'IT', designation: 'Team Lead', managedEmployees: ['EMP004','EMP005','EMP006'] },
+            { username: 'supervisor3', password: 'password123', displayName: 'Supervisor Three', role: 'supervisor', employeeId: 'SUP003', department: 'Operations', designation: 'Operations Manager', managedEmployees: ['EMP007','EMP008'] },
+            { username: 'supervisor4', password: 'password123', displayName: 'Supervisor Four', role: 'supervisor', employeeId: 'SUP004', department: 'Finance', designation: 'Finance Manager', managedEmployees: ['EMP009','EMP010'] },
+            { username: 'employee1', password: 'password123', displayName: 'Employee One', role: 'employee', employeeId: 'EMP001', department: 'IT', designation: 'Software Developer' },
+            { username: 'employee2', password: 'password123', displayName: 'Employee Two', role: 'employee', employeeId: 'EMP002', department: 'IT', designation: 'Junior Developer' },
+            { username: 'employee3', password: 'password123', displayName: 'Employee Three', role: 'employee', employeeId: 'EMP003', department: 'IT', designation: 'QA Engineer' },
+            { username: 'employee4', password: 'password123', displayName: 'Employee Four', role: 'employee', employeeId: 'EMP004', department: 'IT', designation: 'UI/UX Designer' },
+            { username: 'employee5', password: 'password123', displayName: 'Employee Five', role: 'employee', employeeId: 'EMP005', department: 'IT', designation: 'DevOps Engineer' },
+            { username: 'employee6', password: 'password123', displayName: 'Employee Six', role: 'employee', employeeId: 'EMP006', department: 'IT', designation: 'Backend Developer' },
+            { username: 'employee7', password: 'password123', displayName: 'Employee Seven', role: 'employee', employeeId: 'EMP007', department: 'Operations', designation: 'Operations Analyst' },
+            { username: 'employee8', password: 'password123', displayName: 'Employee Eight', role: 'employee', employeeId: 'EMP008', department: 'Operations', designation: 'Operations Coordinator' },
+            { username: 'employee9', password: 'password123', displayName: 'Employee Nine', role: 'employee', employeeId: 'EMP009', department: 'Finance', designation: 'Financial Analyst' },
+            { username: 'employee10', password: 'password123', displayName: 'Employee Ten', role: 'employee', employeeId: 'EMP010', department: 'Finance', designation: 'Accountant' }
         ];
 
         function login(event) {
@@ -111,7 +119,7 @@
             const password = document.getElementById('password').value.trim();
             const user = demoUsers.find(u => u.username === username && u.password === password);
             if (!user) {
-                alert('Invalid credentials. Please try employee / password123, supervisor / password123, or hr / password123.');
+                alert('Invalid credentials. Use hr / password123, supervisor1-4 / password123, or employee1-10 / password123.');
                 return false;
             }
             localStorage.setItem('appraisalDemoUser', JSON.stringify(user));

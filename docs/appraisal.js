@@ -1,25 +1,27 @@
 const appState = {
     currentUser: null,
     userRole: 'employee',
-    allEmployees: [
-        { displayName: 'Employee One', employeeId: 'EMP001', department: 'IT', designation: 'Software Engineer' },
-        { displayName: 'Employee Two', employeeId: 'EMP002', department: 'IT', designation: 'QA Engineer' },
-        { displayName: 'Employee Three', employeeId: 'EMP003', department: 'IT', designation: 'UI/UX Designer' },
-        { displayName: 'Employee Four', employeeId: 'EMP004', department: 'Sales', designation: 'Sales Executive' },
-        { displayName: 'Employee Five', employeeId: 'EMP005', department: 'HR', designation: 'HR Coordinator' }
+    users: [
+        { username: 'hr', password: 'password123', displayName: 'HR Manager', employeeId: 'HR001', department: 'HR', designation: 'HR Manager', role: 'hr', managedEmployees: ['EMP001','EMP002','EMP003','EMP004','EMP005','EMP006','EMP007','EMP008','EMP009','EMP010'] },
+        { username: 'supervisor1', password: 'password123', displayName: 'Supervisor One', employeeId: 'SUP001', department: 'IT', designation: 'Senior Team Lead', role: 'supervisor', managedEmployees: ['EMP001','EMP002','EMP003'] },
+        { username: 'supervisor2', password: 'password123', displayName: 'Supervisor Two', employeeId: 'SUP002', department: 'IT', designation: 'Team Lead', role: 'supervisor', managedEmployees: ['EMP004','EMP005','EMP006'] },
+        { username: 'supervisor3', password: 'password123', displayName: 'Supervisor Three', employeeId: 'SUP003', department: 'Operations', designation: 'Operations Manager', role: 'supervisor', managedEmployees: ['EMP007','EMP008'] },
+        { username: 'supervisor4', password: 'password123', displayName: 'Supervisor Four', employeeId: 'SUP004', department: 'Finance', designation: 'Finance Manager', role: 'supervisor', managedEmployees: ['EMP009','EMP010'] },
+        { username: 'employee1', password: 'password123', displayName: 'Employee One', employeeId: 'EMP001', department: 'IT', designation: 'Software Developer', role: 'employee', supervisorId: 'SUP001' },
+        { username: 'employee2', password: 'password123', displayName: 'Employee Two', employeeId: 'EMP002', department: 'IT', designation: 'Junior Developer', role: 'employee', supervisorId: 'SUP001' },
+        { username: 'employee3', password: 'password123', displayName: 'Employee Three', employeeId: 'EMP003', department: 'IT', designation: 'QA Engineer', role: 'employee', supervisorId: 'SUP001' },
+        { username: 'employee4', password: 'password123', displayName: 'Employee Four', employeeId: 'EMP004', department: 'IT', designation: 'UI/UX Designer', role: 'employee', supervisorId: 'SUP002' },
+        { username: 'employee5', password: 'password123', displayName: 'Employee Five', employeeId: 'EMP005', department: 'IT', designation: 'DevOps Engineer', role: 'employee', supervisorId: 'SUP002' },
+        { username: 'employee6', password: 'password123', displayName: 'Employee Six', employeeId: 'EMP006', department: 'IT', designation: 'Backend Developer', role: 'employee', supervisorId: 'SUP002' },
+        { username: 'employee7', password: 'password123', displayName: 'Employee Seven', employeeId: 'EMP007', department: 'Operations', designation: 'Operations Analyst', role: 'employee', supervisorId: 'SUP003' },
+        { username: 'employee8', password: 'password123', displayName: 'Employee Eight', employeeId: 'EMP008', department: 'Operations', designation: 'Operations Coordinator', role: 'employee', supervisorId: 'SUP003' },
+        { username: 'employee9', password: 'password123', displayName: 'Employee Nine', employeeId: 'EMP009', department: 'Finance', designation: 'Financial Analyst', role: 'employee', supervisorId: 'SUP004' },
+        { username: 'employee10', password: 'password123', displayName: 'Employee Ten', employeeId: 'EMP010', department: 'Finance', designation: 'Accountant', role: 'employee', supervisorId: 'SUP004' }
     ],
     appraisals: []
 };
 
-const defaultKRAs = [
-    'KRA 1', 'KRA 2', 'KRA 3', 'KRA 4', 'KRA 5', 'KRA 6', 'KRA 7', 'KRA 8', 'KRA 9', 'KRA 10'
-];
-
-const demoUsers = [
-    { username: 'employee', displayName: 'Employee User', employeeId: 'EMP001', department: 'IT', designation: 'Software Engineer', role: 'employee' },
-    { username: 'supervisor', displayName: 'Supervisor User', employeeId: 'SUP001', department: 'IT', designation: 'Team Lead', role: 'supervisor', managedEmployees: ['EMP001', 'EMP002', 'EMP003'] },
-    { username: 'hr', displayName: 'HR Manager', employeeId: 'HR001', department: 'HR', designation: 'HR Manager', role: 'hr', managedEmployees: ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005'] }
-];
+const defaultKRAs = ['KRA 1','KRA 2','KRA 3','KRA 4','KRA 5','KRA 6','KRA 7','KRA 8','KRA 9','KRA 10'];
 
 function getSavedAppraisals() {
     const stored = localStorage.getItem('appraisalDemoData');
@@ -38,32 +40,31 @@ function checkAuthentication() {
     }
     appState.currentUser = JSON.parse(storedUser);
     appState.userRole = appState.currentUser.role;
+    appState.appraisals = getSavedAppraisals();
     displayUserInfo();
     initializeAppraisal();
 }
 
 function displayUserInfo() {
-    if (appState.currentUser) {
-        document.getElementById('userDisplay').textContent = appState.currentUser.displayName;
-        document.getElementById('employeeName').value = appState.currentUser.displayName;
-        document.getElementById('employeeId').value = appState.currentUser.employeeId;
-        document.getElementById('department').value = appState.currentUser.department;
-        document.getElementById('designation').value = appState.currentUser.designation;
-    }
+    if (!appState.currentUser) return;
+    document.getElementById('userDisplay').textContent = appState.currentUser.displayName;
+    document.getElementById('employeeName').value = appState.currentUser.displayName;
+    document.getElementById('employeeId').value = appState.currentUser.employeeId;
+    document.getElementById('department').value = appState.currentUser.department;
+    document.getElementById('designation').value = appState.currentUser.designation;
 }
 
 function initializeAppraisal() {
-    appState.appraisals = getSavedAppraisals();
     if (!appState.currentUser) return;
-
     if (appState.userRole === 'supervisor' || appState.userRole === 'hr') {
         document.getElementById('employeeSelectionContainer').style.display = 'block';
         loadManagedEmployees();
+        clearFormFields();
+        setStatus('Select an employee to begin');
     } else {
         document.getElementById('employeeSelectionContainer').style.display = 'none';
         loadExistingAppraisal(appState.currentUser.employeeId);
     }
-
     populateKRATable();
     configureFormForRole();
 }
@@ -72,36 +73,28 @@ function loadManagedEmployees() {
     const employeeSelect = document.getElementById('employeeSelect');
     const employeeSearch = document.getElementById('employeeSearch');
     employeeSelect.innerHTML = '<option value="">Choose an employee...</option>';
-
-    let employeesToShow = [];
-    if (appState.userRole === 'hr') {
-        employeesToShow = appState.allEmployees;
-    } else {
-        const manager = demoUsers.find(u => u.username === 'supervisor');
-        employeesToShow = appState.allEmployees.filter(emp => manager.managedEmployees.includes(emp.employeeId));
-    }
+    const employeeList = appState.users.filter(u => u.role === 'employee');
+    const employeesToShow = appState.userRole === 'hr'
+        ? employeeList
+        : employeeList.filter(emp => (appState.currentUser.managedEmployees || []).includes(emp.employeeId));
     window.allEmployees = employeesToShow;
-
     employeesToShow.forEach(employee => {
         const option = document.createElement('option');
         option.value = employee.employeeId;
         option.textContent = `${employee.displayName} (${employee.employeeId}) - ${employee.designation}`;
         employeeSelect.appendChild(option);
     });
-
     setupSearchableDropdown();
 }
 
 function setupSearchableDropdown() {
     const employeeSelect = document.getElementById('employeeSelect');
     const employeeSearch = document.getElementById('employeeSearch');
-
-    employeeSelect.addEventListener('click', () => {
+    employeeSelect.addEventListener('click', function() {
         employeeSearch.style.display = 'block';
         employeeSearch.focus();
     });
-
-    employeeSearch.addEventListener('input', function () {
+    employeeSearch.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const filtered = window.allEmployees.filter(employee =>
             employee.displayName.toLowerCase().includes(searchTerm) ||
@@ -117,8 +110,7 @@ function setupSearchableDropdown() {
         });
         employeeSelect.size = Math.min(filtered.length + 1, 5);
     });
-
-    employeeSelect.addEventListener('change', function () {
+    employeeSelect.addEventListener('change', function() {
         if (this.value) {
             loadExistingAppraisal(this.value);
             employeeSearch.style.display = 'none';
@@ -126,8 +118,7 @@ function setupSearchableDropdown() {
             employeeSelect.size = 1;
         }
     });
-
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
         if (!employeeSearch.contains(e.target) && !employeeSelect.contains(e.target)) {
             employeeSearch.style.display = 'none';
             employeeSearch.value = '';
@@ -138,23 +129,21 @@ function setupSearchableDropdown() {
 
 function loadExistingAppraisal(employeeId) {
     const appraisal = appState.appraisals.find(a => a.employeeId === employeeId);
+    const employee = appState.users.find(u => u.employeeId === employeeId);
+    if (employee) {
+        document.getElementById('employeeName').value = employee.displayName;
+        document.getElementById('employeeId').value = employee.employeeId;
+        document.getElementById('department').value = employee.department;
+        document.getElementById('designation').value = employee.designation;
+    }
     if (appraisal) {
-        document.getElementById('employeeName').value = appraisal.employeeName;
-        document.getElementById('employeeId').value = appraisal.employeeId;
-        document.getElementById('department').value = appraisal.department;
-        document.getElementById('designation').value = appraisal.designation;
         document.getElementById('appraisalPeriod').value = appraisal.appraisalPeriod;
         populateFormWithData(appraisal);
-        if (appraisal.submitted) disableForm();
-    } else if (appState.userRole !== 'employee') {
-        const employee = appState.allEmployees.find(emp => emp.employeeId === employeeId);
-        if (employee) {
-            document.getElementById('employeeName').value = employee.displayName;
-            document.getElementById('employeeId').value = employee.employeeId;
-            document.getElementById('department').value = employee.department;
-            document.getElementById('designation').value = employee.designation;
-            clearFormFields();
-        }
+        setStatus(appraisal.statusText || getStatusText(appraisal.status));
+        if (appraisal.submitted || appraisal.status === 'hr_approved') disableForm();
+    } else {
+        clearFormFields();
+        setStatus('No appraisal started yet');
     }
 }
 
@@ -166,7 +155,6 @@ function populateFormWithData(appraisal) {
         const challenges = document.getElementById(`kra-challenges-${index}`);
         const supervisorRating = document.getElementById(`kra-supervisor-rating-${index}`);
         const supervisorFeedback = document.getElementById(`kra-supervisor-feedback-${index}`);
-
         if (selfRating) selfRating.value = kra.selfRating || '';
         if (weightage) weightage.value = kra.weightage || '';
         if (achievements) achievements.value = kra.selfAchievements || '';
@@ -191,7 +179,6 @@ function clearFormFields() {
 function populateKRATable() {
     const tbody = document.getElementById('kraTableBody');
     tbody.innerHTML = '';
-
     defaultKRAs.forEach((kra, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -248,7 +235,6 @@ function populateKRATable() {
             </td>
         `;
         tbody.appendChild(row);
-
         const selfRating = document.getElementById(`kra-self-rating-${index}`);
         const supervisorRating = document.getElementById(`kra-supervisor-rating-${index}`);
         if (selfRating) selfRating.addEventListener('change', calculateAverages);
@@ -259,16 +245,18 @@ function populateKRATable() {
 
 function configureFormForRole() {
     const submitBtn = document.getElementById('submitBtn');
-    if (!submitBtn) return;
-
     if (appState.userRole === 'employee') {
         submitBtn.style.display = 'inline-block';
         submitBtn.textContent = 'Submit Self Appraisal';
+        submitBtn.disabled = false;
     } else if (appState.userRole === 'supervisor') {
         submitBtn.style.display = 'inline-block';
         submitBtn.textContent = 'Submit Supervisor Review';
-    } else {
-        submitBtn.style.display = 'none';
+        submitBtn.disabled = false;
+    } else if (appState.userRole === 'hr') {
+        submitBtn.style.display = 'inline-block';
+        submitBtn.textContent = 'Approve Appraisal';
+        submitBtn.disabled = false;
     }
 }
 
@@ -281,8 +269,8 @@ function calculateAverages() {
         if (selfRating) selfRatings.push(Number(selfRating));
         if (supervisorRating) supervisorRatings.push(Number(supervisorRating));
     });
-    document.getElementById('avgSelfRating').value = selfRatings.length ? (selfRatings.reduce((a, b) => a + b, 0) / selfRatings.length).toFixed(2) : 'N/A';
-    document.getElementById('avgSupervisorRating').value = supervisorRatings.length ? (supervisorRatings.reduce((a, b) => a + b, 0) / supervisorRatings.length).toFixed(2) : 'N/A';
+    document.getElementById('avgSelfRating').value = selfRatings.length ? (selfRatings.reduce((a,b)=>a+b,0)/selfRatings.length).toFixed(2) : 'N/A';
+    document.getElementById('avgSupervisorRating').value = supervisorRatings.length ? (supervisorRatings.reduce((a,b)=>a+b,0)/supervisorRatings.length).toFixed(2) : 'N/A';
 }
 
 function submitAppraisal() {
@@ -291,13 +279,12 @@ function submitAppraisal() {
         alert('Please select an employee before submitting.');
         return;
     }
-    const employee = appState.userRole === 'employee'
-        ? appState.currentUser
-        : appState.allEmployees.find(emp => emp.employeeId === selectedEmployeeId);
+    const employee = appState.users.find(u => u.employeeId === selectedEmployeeId);
     if (!employee) {
-        alert('Employee data not available.');
+        alert('Unable to find employee details.');
         return;
     }
+    const existing = appState.appraisals.find(a => a.employeeId === selectedEmployeeId);
     const kras = defaultKRAs.map((parameter, index) => ({
         parameter,
         selfRating: document.getElementById(`kra-self-rating-${index}`)?.value || '',
@@ -307,34 +294,65 @@ function submitAppraisal() {
         supervisorRating: document.getElementById(`kra-supervisor-rating-${index}`)?.value || '',
         supervisorFeedback: document.getElementById(`kra-supervisor-feedback-${index}`)?.value || ''
     }));
-    const appraisalRecord = {
-        employeeId: employee.employeeId,
-        employeeName: employee.displayName,
-        department: employee.department,
-        designation: employee.designation,
-        appraisalPeriod: document.getElementById('appraisalPeriod').value,
-        kras,
-        submitted: true,
-        updatedBy: appState.currentUser.displayName,
-        updatedAt: new Date().toISOString()
-    };
-
-    const existingIndex = appState.appraisals.findIndex(a => a.employeeId === appraisalRecord.employeeId);
-    if (existingIndex >= 0) {
-        appState.appraisals[existingIndex] = appraisalRecord;
+    let appraisal;
+    if (appState.userRole === 'employee') {
+        appraisal = {
+            employeeId: employee.employeeId,
+            employeeName: employee.displayName,
+            department: employee.department,
+            designation: employee.designation,
+            appraisalPeriod: document.getElementById('appraisalPeriod').value,
+            kras,
+            status: 'employee_pending',
+            statusText: 'Employee submitted and waiting for supervisor review',
+            submitted: true,
+            updatedBy: appState.currentUser.displayName,
+            updatedAt: new Date().toISOString()
+        };
+    } else if (appState.userRole === 'supervisor') {
+        if (!existing || existing.status !== 'employee_pending') {
+            alert('This appraisal must be submitted by the employee first.');
+            return;
+        }
+        appraisal = {
+            ...existing,
+            kras,
+            status: 'supervisor_pending',
+            statusText: 'Supervisor submitted and waiting for HR approval',
+            submitted: true,
+            updatedBy: appState.currentUser.displayName,
+            updatedAt: new Date().toISOString()
+        };
+    } else if (appState.userRole === 'hr') {
+        if (!existing || existing.status !== 'supervisor_pending') {
+            alert('This appraisal must be reviewed by a supervisor before HR approval.');
+            return;
+        }
+        appraisal = {
+            ...existing,
+            kras,
+            status: 'hr_approved',
+            statusText: 'HR has approved the appraisal',
+            submitted: true,
+            updatedBy: appState.currentUser.displayName,
+            updatedAt: new Date().toISOString()
+        };
+    }
+    if (!appraisal) return;
+    if (existing) {
+        Object.assign(existing, appraisal);
     } else {
-        appState.appraisals.push(appraisalRecord);
+        appState.appraisals.push(appraisal);
     }
     saveAppraisals();
+    populateFormWithData(appraisal);
+    setStatus(appraisal.statusText);
     disableForm();
-    alert('Appraisal has been saved locally in your browser.');
+    alert('Appraisal action saved locally in this demo.');
 }
 
 function disableForm() {
-    document.querySelectorAll('input, textarea, select').forEach(control => {
-        control.disabled = true;
-    });
-    document.getElementById('appraisalStatus').value = 'Submitted';
+    document.querySelectorAll('input, textarea, select').forEach(el => el.disabled = true);
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn) {
         submitBtn.textContent = 'Submitted';
@@ -347,6 +365,20 @@ function disableForm() {
 function logout() {
     localStorage.removeItem('appraisalDemoUser');
     window.location.href = 'index.html';
+}
+
+function setStatus(text) {
+    const status = document.getElementById('appraisalStatus');
+    if (status) status.value = text;
+}
+
+function getStatusText(status) {
+    switch (status) {
+        case 'employee_pending': return 'Employee submitted and waiting for supervisor review';
+        case 'supervisor_pending': return 'Supervisor submitted and waiting for HR approval';
+        case 'hr_approved': return 'HR approved';
+        default: return 'No appraisal started yet';
+    }
 }
 
 window.addEventListener('DOMContentLoaded', checkAuthentication);
