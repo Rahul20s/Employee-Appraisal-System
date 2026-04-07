@@ -94,6 +94,16 @@ For production deployment:
 3. Update environment variables
 4. Deploy with PM2 or similar process manager
 
+## GitHub Pages Demo
+
+A static demo version of the appraisal UI has been added under the `docs/` folder. It is ready for GitHub Pages as a browser-only experience.
+
+To publish on GitHub Pages:
+1. In your repository settings, set GitHub Pages source to `main` branch and folder `docs/`.
+2. Visit the generated Pages URL after a few minutes.
+
+> Note: This demo uses local browser storage only and does not call any backend APIs.
+
 ## Support
 
 For issues and questions, refer to the `ORGANIZATION_STRUCTURE.md` file for detailed user hierarchy and login information.
